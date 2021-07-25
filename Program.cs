@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.IO.Compression;
 using System.Net;
@@ -60,9 +60,11 @@ namespace SnapshotManager
             }
 
 
-
             string pathString2 =  Environment.GetEnvironmentVariable("LocalAppData") + "\\planetarium\\";
+            
             System.IO.Directory.CreateDirectory(pathString2);
+
+
 
 
             Console.WriteLine("DOWNLOADING SNAPSHOT. DO NOT CLOSE\n");
@@ -75,6 +77,10 @@ namespace SnapshotManager
 
             Console.WriteLine("Snapshot Downloaded");
             string pathzip = Environment.CurrentDirectory + "\\snapshot.zip";
+
+            //Delete current folder if exists, to ensure we aren't just placing new files on-top and causing hundreds of GB's to be stored.
+            System.IO.Directory.Delete(pathString2 + "\\9c-main-snapshot\\", true);
+
 
             Console.WriteLine("Extracting SNAPSHOT, DO NOT CLOSE\n\n\n\n");
             ZipFile.ExtractToDirectory(pathzip, pathString2 + "\\9c-main-snapshot\\");

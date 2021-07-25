@@ -4,7 +4,7 @@ Snapshot Manager will apply the latest config file and download a new snapshot e
 
 # How to use:
 Check the latest release at:
-https://github.com/FioX0/9c-snapshot-manager/releases
+https://github.com/FioX0/9c-snapshot-manager/releases and download SnapshotManager.zip
 
 Download and extract the files somwhere not directly in C:/. Recommended place would be a new folder on your desktop to ensure there aren't permission problems.
 Run the .exe and let it do it's thing. When it is done, it will tell your to run Nine Chronicles.

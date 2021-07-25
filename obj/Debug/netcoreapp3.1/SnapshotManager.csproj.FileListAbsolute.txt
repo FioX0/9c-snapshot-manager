@@ -1,0 +1,13 @@
+C:\Users\Pesso\source\repos\SnapshotManager\bin\Debug\netcoreapp3.1\SnapshotManager.exe
+C:\Users\Pesso\source\repos\SnapshotManager\bin\Debug\netcoreapp3.1\SnapshotManager.deps.json
+C:\Users\Pesso\source\repos\SnapshotManager\bin\Debug\netcoreapp3.1\SnapshotManager.runtimeconfig.json
+C:\Users\Pesso\source\repos\SnapshotManager\bin\Debug\netcoreapp3.1\SnapshotManager.runtimeconfig.dev.json
+C:\Users\Pesso\source\repos\SnapshotManager\bin\Debug\netcoreapp3.1\SnapshotManager.dll
+C:\Users\Pesso\source\repos\SnapshotManager\bin\Debug\netcoreapp3.1\SnapshotManager.pdb
+C:\Users\Pesso\source\repos\SnapshotManager\obj\Debug\netcoreapp3.1\SnapshotManager.csproj.AssemblyReference.cache
+C:\Users\Pesso\source\repos\SnapshotManager\obj\Debug\netcoreapp3.1\SnapshotManager.AssemblyInfoInputs.cache
+C:\Users\Pesso\source\repos\SnapshotManager\obj\Debug\netcoreapp3.1\SnapshotManager.AssemblyInfo.cs
+C:\Users\Pesso\source\repos\SnapshotManager\obj\Debug\netcoreapp3.1\SnapshotManager.csproj.CoreCompileInputs.cache
+C:\Users\Pesso\source\repos\SnapshotManager\obj\Debug\netcoreapp3.1\SnapshotManager.dll
+C:\Users\Pesso\source\repos\SnapshotManager\obj\Debug\netcoreapp3.1\SnapshotManager.pdb
+C:\Users\Pesso\source\repos\SnapshotManager\obj\Debug\netcoreapp3.1\SnapshotManager.genruntimeconfig.cache

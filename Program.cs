@@ -10,10 +10,6 @@ namespace SnapshotManager
         static void Main(string[] args)
         {
             Console.WriteLine("SnapshotManager for Nince Chronicles version 100060\n\n");
-            Console.WriteLine("Creating Folders if required\n");
-            string folderName = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
-            string pathString = System.IO.Path.Combine(folderName, "temp");
-            System.IO.Directory.CreateDirectory(pathString);
         
             using (var client = new WebClient())
             {
@@ -61,7 +57,7 @@ namespace SnapshotManager
 
 
             string pathString2 =  Environment.GetEnvironmentVariable("LocalAppData") + "\\planetarium\\";
-            
+            Console.WriteLine("Creating Folders if required\n");
             System.IO.Directory.CreateDirectory(pathString2);
 
 

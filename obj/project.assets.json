@@ -1,11 +1,38 @@
 {
   "version": 3,
   "targets": {
-    ".NETCoreApp,Version=v3.1": {}
+    ".NETCoreApp,Version=v3.1": {
+      "CSharpLib/3.0.1": {
+        "type": "package",
+        "compile": {
+          "lib/CSharpLib.dll": {}
+        },
+        "runtime": {
+          "lib/CSharpLib.dll": {}
+        }
+      }
+    }
   },
-  "libraries": {},
+  "libraries": {
+    "CSharpLib/3.0.1": {
+      "sha512": "t7ZM6xxAXIYN795JaHWFAwHTAwpbL6rGwhYJWfFpWHwouvExay2a71LNT9Ag39ca9SMXY8KfXN/lSqkUa/l4Mg==",
+      "type": "package",
+      "path": "csharplib/3.0.1",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "csharplib.3.0.1.nupkg.sha512",
+        "csharplib.nuspec",
+        "icon.png",
+        "lib/CSharpLib.dll",
+        "lib/CSharpLib.xml"
+      ]
+    }
+  },
   "projectFileDependencyGroups": {
-    ".NETCoreApp,Version=v3.1": []
+    ".NETCoreApp,Version=v3.1": [
+      "CSharpLib >= 3.0.1"
+    ]
   },
   "packageFolders": {
     "C:\\Users\\Pesso\\.nuget\\packages\\": {},
@@ -51,6 +78,12 @@
     "frameworks": {
       "netcoreapp3.1": {
         "targetAlias": "netcoreapp3.1",
+        "dependencies": {
+          "CSharpLib": {
+            "target": "Package",
+            "version": "[3.0.1, )"
+          }
+        },
         "imports": [
           "net461",
           "net462",
@@ -69,5 +102,17 @@
         "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.301\\RuntimeIdentifierGraph.json"
       }
     }
-  }
+  },
+  "logs": [
+    {
+      "code": "NU1701",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Package 'CSharpLib 3.0.1' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8' instead of the project target framework '.NETCoreApp,Version=v3.1'. This package may not be fully compatible with your project.",
+      "libraryId": "CSharpLib",
+      "targetGraphs": [
+        ".NETCoreApp,Version=v3.1"
+      ]
+    }
+  ]
 }

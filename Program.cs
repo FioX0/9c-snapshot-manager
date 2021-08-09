@@ -84,7 +84,7 @@ namespace SnapshotManager
                 Thread.CurrentThread.IsBackground = true;
                 using (var client = new WebClient())
                 {
-                    client.DownloadFile("https://snapshots.nine-chronicles.com/main/e7922c/mono/9c-main-snapshot.zip", "snapshot.zip");
+                    client.DownloadFile("https://snapshots.nine-chronicles.com/main/mono/9c-main-snapshot.zip", "snapshot.zip");
                 }
             }).Start();
             Thread.Sleep(5000);

@@ -15,6 +15,7 @@ namespace SnapshotManager
     class Program
     {
         static WebClient lWebClient = new WebClient();
+        static WebClient lWebClient2 = new WebClient();
         static int download = 1;
         static async Task Main(string[] args)
         {
@@ -38,10 +39,7 @@ namespace SnapshotManager
 
                     Console.WriteLine("Current Config is not monorkcsdb");
 
-                    using (var client = new WebClient())
-                    {
-                        client.DownloadFile("https://cdn.discordapp.com/attachments/653951482395361301/875776424760455229/config.json", "config.json");
-                    }
+                    lWebClient2.DownloadFile("https://cdn.discordapp.com/attachments/613670425729171456/867675981653475348/config.json", "config.json");
 
                     Console.WriteLine("Config Downloaded\n");
 
@@ -120,9 +118,9 @@ namespace SnapshotManager
                         System.Net.ServicePointManager.Expect100Continue = false;
                         Thread.CurrentThread.IsBackground = true;
                         lWebClient.Timeout = 600 * 60 * 1000;
-                        lWebClient.DownloadFileCompleted += new AsyncCompletedEventHandler(FileDone);
-                        await lWebClient.DownloadFileTaskAsync("https://snapshots.nine-chronicles.com/main/mono/9c-main-snapshot.zip", Environment.CurrentDirectory + "snapshot.zip");
-                        //await webClient.DownloadFileTaskAsync("https://snapshots.nine-chronicles.com/main/mono/9c-main-snapshot.zip", "snapshot.zip");
+                        //lWebClient.DownloadFileCompleted += new AsyncCompletedEventHandler(FileDone);
+                        //await lWebClient.DownloadFileTaskAsync("https://snapshots.nine-chronicles.com/main/mono/9c-main-snapshot.zip", "snapshot.zip");
+                        await lWebClient.DownloadFileTaskAsync("https://snapshots.nine-chronicles.com/main/mono/9c-main-snapshot.zip", "snapshot.zip");
                     }
                     catch (Exception ex) { Console.WriteLine(ex); Console.Read(); }
 
@@ -131,7 +129,7 @@ namespace SnapshotManager
 
                 Thread.Sleep(10000);
                 Console.WriteLine("DOWNLOADING SNAPSHOT. DO NOT CLOSE\n");
-                Console.WriteLine("This download is around 3Gb, so it will take some time.\n");
+                Console.WriteLine("This download is quite large, so it will take some time.\n");
 
                 ProgressBar.WriteProgressBar(0);
                 Thread.Sleep(10000);
@@ -139,6 +137,7 @@ namespace SnapshotManager
                 // Snapshot Size 14027199045
                 // There's no way to know the exact complete file size, so we are using estimates.
                 long percentage = 0;
+                download = 1;
                 while (download == 1)
                 {
                     info = new FileInfo("snapshot.zip");

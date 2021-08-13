@@ -1,0 +1,41 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v3.1",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v3.1": {
+      "SnapshotManager/1.0.0": {
+        "dependencies": {
+          "CSharpLib": "3.0.1"
+        },
+        "runtime": {
+          "SnapshotManager.dll": {}
+        }
+      },
+      "CSharpLib/3.0.1": {
+        "runtime": {
+          "lib/CSharpLib.dll": {
+            "assemblyVersion": "3.0.0.0",
+            "fileVersion": "3.0.0.0"
+          }
+        }
+      }
+    }
+  },
+  "libraries": {
+    "SnapshotManager/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "CSharpLib/3.0.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-t7ZM6xxAXIYN795JaHWFAwHTAwpbL6rGwhYJWfFpWHwouvExay2a71LNT9Ag39ca9SMXY8KfXN/lSqkUa/l4Mg==",
+      "path": "csharplib/3.0.1",
+      "hashPath": "csharplib.3.0.1.nupkg.sha512"
+    }
+  }
+}

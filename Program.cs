@@ -14,7 +14,7 @@ namespace SnapshotManager
 {
     class Program
     {
-        static WebClient webClient = new WebClient();
+        static WebClient lWebClient = new WebClient();
         static int download = 1;
         static async Task Main(string[] args)
         {
@@ -40,12 +40,12 @@ namespace SnapshotManager
 
                     using (var client = new WebClient())
                     {
-                        client.DownloadFile("https://cdn.discordapp.com/attachments/613670425729171456/867675981653475348/config.json", "config.json");
+                        client.DownloadFile("https://cdn.discordapp.com/attachments/653951482395361301/875776424760455229/config.json", "config.json");
                     }
 
                     Console.WriteLine("Config Downloaded\n");
 
-                    File.Move(path2, path3);
+                    File.Move(path2, path3, true);
                     Console.WriteLine("Backed up old config as configold.json");
 
                     //Console.WriteLine(path2);
@@ -117,9 +117,11 @@ namespace SnapshotManager
                 {
                     try
                     {
+                        System.Net.ServicePointManager.Expect100Continue = false;
                         Thread.CurrentThread.IsBackground = true;
-                        webClient.DownloadFileCompleted += new AsyncCompletedEventHandler(FileDone);
-                        await webClient.DownloadFileTaskAsync("https://snapshots.nine-chronicles.com/main/mono/9c-main-snapshot.zip", "snapshot.zip");
+                        lWebClient.Timeout = 600 * 60 * 1000;
+                        lWebClient.DownloadFileCompleted += new AsyncCompletedEventHandler(FileDone);
+                        await lWebClient.DownloadFileTaskAsync("https://snapshots.nine-chronicles.com/main/mono/9c-main-snapshot.zip", Environment.CurrentDirectory + "snapshot.zip");
                         //await webClient.DownloadFileTaskAsync("https://snapshots.nine-chronicles.com/main/mono/9c-main-snapshot.zip", "snapshot.zip");
                     }
                     catch (Exception ex) { Console.WriteLine(ex); Console.Read(); }
@@ -134,13 +136,13 @@ namespace SnapshotManager
                 ProgressBar.WriteProgressBar(0);
                 Thread.Sleep(10000);
                 FileInfo info = new FileInfo("snapshot.zip");
-                // Snapshot Size 4027199045
+                // Snapshot Size 14027199045
                 // There's no way to know the exact complete file size, so we are using estimates.
                 long percentage = 0;
                 while (download == 1)
                 {
                     info = new FileInfo("snapshot.zip");
-                    percentage = (info.Length * 100) / 4027199045;
+                    percentage = (info.Length * 100) / 14027199045;
                     if (percentage < 99)
                     {
                         ProgressBar.WriteProgressBar((int)percentage, true);
@@ -185,6 +187,19 @@ namespace SnapshotManager
                 Console.WriteLine(ex);
                 Console.ReadLine();
                 return false;
+            }
+        }
+
+        private class WebClient : System.Net.WebClient
+        {
+            public int Timeout { get; set; }
+
+            protected override WebRequest GetWebRequest(Uri uri)
+            {
+                WebRequest lWebRequest = base.GetWebRequest(uri);
+                lWebRequest.Timeout = Timeout;
+                ((HttpWebRequest)lWebRequest).ReadWriteTimeout = Timeout;
+                return lWebRequest;
             }
         }
 

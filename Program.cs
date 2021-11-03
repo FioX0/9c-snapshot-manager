@@ -119,8 +119,8 @@ namespace SnapshotManager
                         Thread.CurrentThread.IsBackground = true;
                         lWebClient.Timeout = 600 * 60 * 1000;
                         //lWebClient.DownloadFileCompleted += new AsyncCompletedEventHandler(FileDone);
-                        //await lWebClient.DownloadFileTaskAsync("https://snapshots.nine-chronicles.com/main/mono/9c-main-snapshot.zip", "snapshot.zip");
-                        await lWebClient.DownloadFileTaskAsync("https://snapshots.nine-chronicles.com/main/mono/9c-main-snapshot.zip", "snapshot.zip");
+                        //await lWebClient.DownloadFileTaskAsync("https://snapshots.nine-chronicles.com/main/partition/full/9c-main-snapshot.zip", "snapshot.zip");
+                        await lWebClient.DownloadFileTaskAsync("https://snapshots.nine-chronicles.com/main/partition/full/9c-main-snapshot.zip", "snapshot.zip");
                     }
                     catch (Exception ex) { Console.WriteLine(ex); Console.Read(); }
 

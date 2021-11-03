@@ -34,60 +34,6 @@ namespace SnapshotManager
 
                 string text = System.IO.File.ReadAllText(path2);
 
-                if (!text.Contains("monorocksdb"))
-                {
-
-                    Console.WriteLine("Current Config is not monorkcsdb");
-
-                    lWebClient2.DownloadFile("https://cdn.discordapp.com/attachments/613670425729171456/867675981653475348/config.json", "config.json");
-
-                    Console.WriteLine("Config Downloaded\n");
-
-                    File.Move(path2, path3, true);
-                    Console.WriteLine("Backed up old config as configold.json");
-
-                    //Console.WriteLine(path2);
-
-                    //// Ensure that the target does not exist.
-                    if (File.Exists(path2))
-                        File.Delete(path2);
-
-                    Console.WriteLine("Move Config\n");
-                    string path = Environment.CurrentDirectory + "\\config.json";
-                    try
-                    {
-                        if (!File.Exists(path))
-                        {
-                            // This statement ensures that the file is created,
-                            // but the handle is not kept.
-                            using (FileStream fs = File.Create(path)) { }
-                        }
-
-                        // Move the file.
-                        File.Move(path, path2);
-                        Console.WriteLine("{0} was moved to {1}.\n\n", path, path2);
-
-                        // See if the original exists now.
-                        if (File.Exists(path))
-                        {
-                            Console.WriteLine("Doesn't look like I managed to move the config file.\n");
-                        }
-                        else
-                        {
-                            Console.WriteLine("Succesfuly moved the Config File.\n");
-                        }
-                    }
-                    catch (Exception e)
-                    {
-                        Console.WriteLine("The process failed: {0}\n\n\n\n", e.ToString());
-                        File.Move(path3, path2);
-                    }
-                }
-                else
-                {
-                    Console.WriteLine("Already on monorockdb\n");
-                }
-
                 string pathString2 = string.Empty;
              
                 if (text.Contains("BlockchainStoreDirParent"))
@@ -119,8 +65,8 @@ namespace SnapshotManager
                         Thread.CurrentThread.IsBackground = true;
                         lWebClient.Timeout = 600 * 60 * 1000;
                         //lWebClient.DownloadFileCompleted += new AsyncCompletedEventHandler(FileDone);
-                        //await lWebClient.DownloadFileTaskAsync("https://snapshots.nine-chronicles.com/main/mono/9c-main-snapshot.zip", "snapshot.zip");
-                        await lWebClient.DownloadFileTaskAsync("https://snapshots.nine-chronicles.com/main/mono/9c-main-snapshot.zip", "snapshot.zip");
+                        //await lWebClient.DownloadFileTaskAsync("https://snapshots.nine-chronicles.com/main/partition/full/9c-main-snapshot.zip", "snapshot.zip");
+                        await lWebClient.DownloadFileTaskAsync("https://snapshots.nine-chronicles.com/main/partition/full/9c-main-snapshot.zip", "snapshot.zip");
                     }
                     catch (Exception ex) { Console.WriteLine(ex); Console.Read(); }
 

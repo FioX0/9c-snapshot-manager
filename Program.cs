@@ -35,7 +35,61 @@ namespace SnapshotManager
                 string text = System.IO.File.ReadAllText(path2);
 
                 string pathString2 = string.Empty;
-             
+
+                if (text.Contains("monorocksdb"))
+                {
+
+                    Console.WriteLine("Current Config is monorkcsdb which is no longer valid");
+
+                    lWebClient2.DownloadFile("https://cdn.discordapp.com/attachments/674880780408848404/905555413796286474/config.json", "config.json");
+
+                    Console.WriteLine("Config Downloaded\n");
+
+                    File.Move(path2, path3, true);
+                    Console.WriteLine("Backed up old config as configold.json");
+
+                    //Console.WriteLine(path2);
+
+                    //// Ensure that the target does not exist.
+                    if (File.Exists(path2))
+                        File.Delete(path2);
+
+                    Console.WriteLine("Move Config\n");
+                    string path = Environment.CurrentDirectory + "\\config.json";
+                    try
+                    {
+                        if (!File.Exists(path))
+                        {
+                            // This statement ensures that the file is created,
+                            // but the handle is not kept.
+                            using (FileStream fs = File.Create(path)) { }
+                        }
+
+                        // Move the file.
+                        File.Move(path, path2);
+                        Console.WriteLine("{0} was moved to {1}.\n\n", path, path2);
+
+                        // See if the original exists now.
+                        if (File.Exists(path))
+                        {
+                            Console.WriteLine("Doesn't look like I managed to move the config file.\n");
+                        }
+                        else
+                        {
+                            Console.WriteLine("Succesfuly moved the Config File.\n");
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine("The process failed: {0}\n\n\n\n", e.ToString());
+                        File.Move(path3, path2);
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Already on rocksdb\n");
+                }
+
                 if (text.Contains("BlockchainStoreDirParent"))
                 {
                     Console.WriteLine("Custom Path Found");
@@ -44,7 +98,7 @@ namespace SnapshotManager
                     var newpath = path.First().ToString();
                     newpath = newpath.Remove(0,30);
                     var length = newpath.Length;
-                    newpath = newpath.Remove(length - 2, 2);
+                    newpath = newpath.Remove(length - 1, 1);
                     Console.WriteLine(newpath);
                     pathString2 = newpath;
                 }
@@ -64,7 +118,7 @@ namespace SnapshotManager
                         System.Net.ServicePointManager.Expect100Continue = false;
                         Thread.CurrentThread.IsBackground = true;
                         lWebClient.Timeout = 600 * 60 * 1000;
-                        //lWebClient.DownloadFileCompleted += new AsyncCompletedEventHandler(FileDone);
+                        lWebClient.DownloadFileCompleted += new AsyncCompletedEventHandler(FileDone);
                         //await lWebClient.DownloadFileTaskAsync("https://snapshots.nine-chronicles.com/main/partition/full/9c-main-snapshot.zip", "snapshot.zip");
                         await lWebClient.DownloadFileTaskAsync("https://snapshots.nine-chronicles.com/main/partition/full/9c-main-snapshot.zip", "snapshot.zip");
                     }
@@ -104,7 +158,7 @@ namespace SnapshotManager
                 //Delete current folder if exists, to ensure we aren't just placing new files on-top and causing hundreds of GB's to be stored.
                 try
                 {
-                    System.IO.Directory.Delete(pathString2 + "\\9c-main-snapshot\\", true);
+                    System.IO.Directory.Delete(pathString2 + "\\9c-main-partition\\", true);
                 }
                 catch (Exception ex) { }
 
@@ -123,7 +177,7 @@ namespace SnapshotManager
             try
             {
                 Console.WriteLine("Attempting to Extract:");
-                ZipFile.ExtractToDirectory(pathzip, pathstring2 + "\\9c-main-snapshot\\");
+                ZipFile.ExtractToDirectory(pathzip, pathstring2 + "\\9c-main-partition\\");
                 return true;
             }
             catch (Exception ex)

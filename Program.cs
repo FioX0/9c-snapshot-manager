@@ -39,9 +39,9 @@ namespace SnapshotManager
                 if (text.Contains("monorocksdb"))
                 {
 
-                    Console.WriteLine("Current Config is monorkcsdb which is no longer valid");
+                    Console.WriteLine("Current Config is monorkcsdb which is no longer valid, downloading new config file");
 
-                    lWebClient2.DownloadFile("https://cdn.discordapp.com/attachments/674880780408848404/905555413796286474/config.json", "config.json");
+                    lWebClient2.DownloadFile("https://cdn.discordapp.com/attachments/674880780408848404/905555413796286474/config.json", Environment.CurrentDirectory + "\\config.json");
 
                     Console.WriteLine("Config Downloaded\n");
 
@@ -120,9 +120,9 @@ namespace SnapshotManager
                         lWebClient.Timeout = 600 * 60 * 1000;
                         lWebClient.DownloadFileCompleted += new AsyncCompletedEventHandler(FileDone);
                         //await lWebClient.DownloadFileTaskAsync("https://snapshots.nine-chronicles.com/main/partition/full/9c-main-snapshot.zip", "snapshot.zip");
-                        await lWebClient.DownloadFileTaskAsync("https://snapshots.nine-chronicles.com/main/partition/full/9c-main-snapshot.zip", "snapshot.zip");
+                        await lWebClient.DownloadFileTaskAsync("https://snapshots.nine-chronicles.com/main/partition/full/9c-main-snapshot.zip", Environment.CurrentDirectory + "\\snapshot.zip");
                     }
-                    catch (Exception ex) { Console.WriteLine(ex); Console.Read(); }
+                    catch (Exception ex) { Console.WriteLine(ex); Console.WriteLine("Unstable Connection, download failed");  Console.Read();}
 
 
                 }).Start();
@@ -130,6 +130,7 @@ namespace SnapshotManager
                 Thread.Sleep(10000);
                 Console.WriteLine("DOWNLOADING SNAPSHOT. DO NOT CLOSE\n");
                 Console.WriteLine("This download is quite large, so it will take some time.\n");
+                Console.WriteLine("Downloading Snapshot.zip file to " + Environment.CurrentDirectory + "\\snapshot.zip\n");
 
                 ProgressBar.WriteProgressBar(0);
                 Thread.Sleep(10000);
@@ -140,7 +141,7 @@ namespace SnapshotManager
                 download = 1;
                 while (download == 1)
                 {
-                    info = new FileInfo("snapshot.zip");
+                    info = new FileInfo(Environment.CurrentDirectory + "\\snapshot.zip");
                     percentage = (info.Length * 100) / 14027199045;
                     if (percentage < 99)
                     {
@@ -165,10 +166,18 @@ namespace SnapshotManager
 
                 Console.WriteLine("Extracting SNAPSHOT, DO NOT CLOSE\n\n");
                 //Will continue to attempt extracting if it's still finishing last % of download.
-                await ExtractFiles(pathzip, pathString2);
-                Console.WriteLine("Extracted\n");
-                Console.WriteLine("You can now start the game\n");
-                Console.ReadLine();
+                var state = await ExtractFiles(pathzip, pathString2);
+                if (!state)
+                {
+                    Console.WriteLine("Extraction failed, please extract manually and report this error with a screenshot of the console.");
+                    Console.ReadLine();
+                }
+                else
+                {
+                    Console.WriteLine("Extracted\n");
+                    Console.WriteLine("You can now start the game\n");
+                    Console.ReadLine();
+                }
             }
         }
 
@@ -177,6 +186,7 @@ namespace SnapshotManager
             try
             {
                 Console.WriteLine("Attempting to Extract:");
+                pathstring2 = pathstring2.Replace("\"", "");
                 ZipFile.ExtractToDirectory(pathzip, pathstring2 + "\\9c-main-partition\\");
                 return true;
             }

@@ -27,7 +27,7 @@ namespace SnapshotManager
             }
             else
             {
-                Console.WriteLine("SnapshotManager for Nince Chronicles version 100060+\n");
+                Console.WriteLine("SnapshotManager V2.2.2\n");
 
                 string path2 = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\Nine Chronicles\\config.json";
                 string path3 = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\Nine Chronicles\\configold.json";
@@ -41,6 +41,7 @@ namespace SnapshotManager
 
                     Console.WriteLine("Current Config is monorkcsdb which is no longer valid, downloading new config file");
 
+                    lWebClient2.Timeout = 600 * 60 * 1000;
                     lWebClient2.DownloadFile("https://cdn.discordapp.com/attachments/674880780408848404/905555413796286474/config.json", Environment.CurrentDirectory + "\\config.json");
 
                     Console.WriteLine("Config Downloaded\n");
@@ -122,27 +123,26 @@ namespace SnapshotManager
                         //await lWebClient.DownloadFileTaskAsync("https://snapshots.nine-chronicles.com/main/partition/full/9c-main-snapshot.zip", "snapshot.zip");
                         await lWebClient.DownloadFileTaskAsync("https://snapshots.nine-chronicles.com/main/partition/full/9c-main-snapshot.zip", Environment.CurrentDirectory + "\\snapshot.zip");
                     }
-                    catch (Exception ex) { Console.WriteLine(ex); Console.WriteLine("Unstable Connection, download failed");  Console.Read();}
-
-
+                    catch (Exception ex) { Console.WriteLine("Unstable Connection, download failed"); Console.ReadLine(); }
                 }).Start();
 
                 Thread.Sleep(10000);
                 Console.WriteLine("DOWNLOADING SNAPSHOT. DO NOT CLOSE\n");
                 Console.WriteLine("This download is quite large, so it will take some time.\n");
                 Console.WriteLine("Downloading Snapshot.zip file to " + Environment.CurrentDirectory + "\\snapshot.zip\n");
+                Console.WriteLine("If you get any error mid-download this would indicate that the connection has dropped.\n");
 
                 ProgressBar.WriteProgressBar(0);
                 Thread.Sleep(10000);
                 FileInfo info = new FileInfo("snapshot.zip");
-                // Snapshot Size 14027199045
+                // Snapshot Size 20027199045
                 // There's no way to know the exact complete file size, so we are using estimates.
                 long percentage = 0;
                 download = 1;
                 while (download == 1)
                 {
                     info = new FileInfo(Environment.CurrentDirectory + "\\snapshot.zip");
-                    percentage = (info.Length * 100) / 14027199045;
+                    percentage = (info.Length * 100) / 20027199045;
                     if (percentage < 99)
                     {
                         ProgressBar.WriteProgressBar((int)percentage, true);
@@ -156,15 +156,6 @@ namespace SnapshotManager
 
                 string pathzip = Environment.CurrentDirectory + "\\snapshot.zip";
 
-                //Delete current folder if exists, to ensure we aren't just placing new files on-top and causing hundreds of GB's to be stored.
-                try
-                {
-                    System.IO.Directory.Delete(pathString2 + "\\9c-main-partition\\", true);
-                }
-                catch (Exception ex) { }
-
-
-                Console.WriteLine("Extracting SNAPSHOT, DO NOT CLOSE\n\n");
                 //Will continue to attempt extracting if it's still finishing last % of download.
                 var state = await ExtractFiles(pathzip, pathString2);
                 if (!state)
@@ -175,7 +166,18 @@ namespace SnapshotManager
                 else
                 {
                     Console.WriteLine("Extracted\n");
-                    Console.WriteLine("You can now start the game\n");
+                    string command = Environment.GetEnvironmentVariable("LocalAppData");
+                    command = command + @"""\Programs\Nine Chronicles\Nine Chronicles.exe""";
+                    Process p = new Process();
+                    ProcessStartInfo startInfo = new ProcessStartInfo();
+                    startInfo.FileName = "cmd.exe";
+                    startInfo.Arguments = @"/C " + command; // cmd.exe spesific implementation
+                    startInfo.UseShellExecute = true;
+                    startInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                    p.StartInfo = startInfo;            
+                    p.Start();
+
+                    Console.WriteLine("SnapshotManager attempted to run Nine Chronicles Automatically\nIf it didn't open, do so manually.");
                     Console.ReadLine();
                 }
             }
@@ -185,9 +187,11 @@ namespace SnapshotManager
         {
             try
             {
+                await DeleteFolder(pathzip, pathstring2);
+                Console.WriteLine("Extracting SNAPSHOT, DO NOT CLOSE\n");
                 Console.WriteLine("Attempting to Extract:");
                 pathstring2 = pathstring2.Replace("\"", "");
-                ZipFile.ExtractToDirectory(pathzip, pathstring2 + "\\9c-main-partition\\");
+                ZipFile.ExtractToDirectory(pathzip, pathstring2 + "\\9c-main-partition\\",true);
                 return true;
             }
             catch (Exception ex)
@@ -195,6 +199,32 @@ namespace SnapshotManager
                 Console.WriteLine("Failed To extract.\n");
                 Console.WriteLine(ex);
                 Console.ReadLine();
+                return false;
+            }
+        }
+
+        public static async Task<bool> DeleteFolder(string pathzip, string pathstring2)
+        {
+            try
+            {
+                pathstring2 = pathstring2.Replace("\"", "");
+                pathstring2 += "\\\\9c-main-partition";
+                string path = pathstring2.Replace(@"\\", @"\");
+                Console.WriteLine("Check if SnapshotFolder already exists\n");
+                if (Directory.Exists(path))
+                {
+                    Directory.Delete(pathstring2, true);
+                    Console.WriteLine("Deleted old snapshot data\n");
+                    Thread.Sleep(4000);
+                }
+                else
+                    Console.WriteLine("No Previous Snapshot data found\n");
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Failed To delete old snapshot data.\n");
+                Console.WriteLine(ex);
                 return false;
             }
         }
